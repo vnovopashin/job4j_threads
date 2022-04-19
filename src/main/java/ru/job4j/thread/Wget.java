@@ -32,19 +32,23 @@ public class Wget implements Runnable {
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             long start = System.currentTimeMillis();
+            long resultTime;
+            int downloadData = 0;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-                long end = System.currentTimeMillis();
-                long resultTime = end - start;
-                long expTime = bytesRead / speed;
-                try {
-                    if (resultTime < expTime) {
-                        Thread.sleep(expTime - resultTime);
+                downloadData += bytesRead;
+                if (downloadData >= speed) {
+                    resultTime = System.currentTimeMillis() - start;
+                    if (resultTime < 1000) {
+                        try {
+                            Thread.sleep(1000 - resultTime);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
                     }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    downloadData = 0;
+                    start = System.currentTimeMillis();
                 }
-                start = System.currentTimeMillis();
+                fileOutputStream.write(dataBuffer, 0, bytesRead);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,6 +56,9 @@ public class Wget implements Runnable {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        if (args.length != 3) {
+            throw new IllegalArgumentException("Неверное количество или порядок переданных аргументов");
+        }
         String url = args[0];
         int speed = Integer.parseInt(args[1]);
         String file = args[2];
