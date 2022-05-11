@@ -31,7 +31,7 @@ public class UserStorage {
     }
 
     public synchronized boolean update(User user) {
-        return userMap.replace(user.getId(), user) == null;
+        return userMap.replace(user.getId(), user) != null;
     }
 
     public synchronized boolean delete(User user) {
@@ -46,15 +46,13 @@ public class UserStorage {
      * @param amount сумма перевода
      */
     public synchronized void transfer(int fromId, int toId, int amount) {
-        User userOne = null;
-        User userTwo = null;
         if (userMap.containsKey(fromId) && userMap.containsKey(toId)) {
-            userOne = userMap.get(fromId);
-            userTwo = userMap.get(toId);
-        }
-        if (userOne != null && userOne.getAmount() >= amount) {
-            userOne.setAmount(userOne.getAmount() - amount);
-            userTwo.setAmount(userTwo.getAmount() + amount);
+            User  userOne = userMap.get(fromId);
+            User  userTwo = userMap.get(toId);
+            if (userOne != null && userTwo != null && userOne.getAmount() >= amount) {
+                userOne.setAmount(userOne.getAmount() - amount);
+                userTwo.setAmount(userTwo.getAmount() + amount);
+            }
         }
     }
 }
