@@ -46,13 +46,11 @@ public class UserStorage {
      * @param amount сумма перевода
      */
     public synchronized void transfer(int fromId, int toId, int amount) {
-        if (userMap.containsKey(fromId) && userMap.containsKey(toId)) {
-            User  userOne = userMap.get(fromId);
-            User  userTwo = userMap.get(toId);
-            if (userOne != null && userTwo != null && userOne.getAmount() >= amount) {
-                userOne.setAmount(userOne.getAmount() - amount);
-                userTwo.setAmount(userTwo.getAmount() + amount);
-            }
+        User userOne = userMap.get(fromId);
+        User userTwo = userMap.get(toId);
+        if (userOne != null && userTwo != null && userOne.getAmount() >= amount) {
+            userOne.setAmount(userOne.getAmount() - amount);
+            userTwo.setAmount(userTwo.getAmount() + amount);
         }
     }
 }
