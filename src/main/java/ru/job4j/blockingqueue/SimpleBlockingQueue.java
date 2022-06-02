@@ -27,6 +27,10 @@ public class SimpleBlockingQueue<T> {
         return queue.size();
     }
 
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
     /**
      * Метод позволяет положить в очередь элемент value,
      * если очередь заполнена то поток ставится в ожидание (засыпает),
