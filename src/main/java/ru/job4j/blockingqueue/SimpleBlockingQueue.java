@@ -34,13 +34,9 @@ public class SimpleBlockingQueue<T> {
      *
      * @param value значение для помещения в очередь
      */
-    public synchronized void offer(T value) {
+    public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == queueMaxSize) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
         queue.offer(value);
         notify();
@@ -51,13 +47,9 @@ public class SimpleBlockingQueue<T> {
      *
      * @return удаляет элемент из очереди и возвращает его.
      */
-    public synchronized T poll() {
+    public synchronized T poll() throws InterruptedException {
         while (queue.size() == 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            wait();
         }
         T rsl = queue.poll();
         notify();
