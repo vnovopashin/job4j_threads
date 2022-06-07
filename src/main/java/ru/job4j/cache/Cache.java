@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Cache {
     private final Map<Integer, Base> memory = new ConcurrentHashMap<>();
 
-    public synchronized Map<Integer, Base> getMemory() {
-        return memory;
+    public Map<Integer, Base> getMemory() {
+        return new ConcurrentHashMap<>(memory);
     }
 
     /**
