@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
  * @date 12.06.2022
  */
 public class EmailNotification {
-    private ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private final ExecutorService pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public void emailTo(User user) {
         String subject = String.format("Notification %s to email %s.", user.getUsername(), user.getEmail());
