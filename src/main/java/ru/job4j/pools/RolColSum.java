@@ -100,8 +100,7 @@ public class RolColSum {
         Map<Integer, CompletableFuture<Sums>> futures = new HashMap<>();
         for (int i = 0; i < matrix.length; i++) {
             Sums s = new Sums();
-            getTaskForRow(matrix, s, i);
-            futures.put(i, getTaskForColumn(matrix, s, i));
+            futures.put(i, getTask(matrix, s, i));
         }
         for (Integer key : futures.keySet()) {
             sums[key] = futures.get(key).get();
@@ -110,42 +109,24 @@ public class RolColSum {
     }
 
     /**
-     * Метод запускает асинхронную задачу по вычислению суммы элементов каждой строки
-     * и присваивает результат в поле объекта Sums
+     * Метод запускает асинхронную задачу по вычислению суммы элементов каждой строки и столбца
+     * и присваивает результат в поля объекта Sums
      *
-     * @param matrix матрица, строки которой необходимо суммировать
+     * @param matrix матрица, строки и столбцы которой необходимо суммировать
      * @param sums   объект в поле которого будет помещен результат суммирования
-     * @param index  индекс строки
-     * @return инициализирует поле rowSum, объекта типа Sums
+     * @param index  индекс строки и столбца
+     * @return инициализирует поля rowSum, объекта типа Sums
      * и возвращает CompletableFuture<Sums> значение которого можно получить методом get()
      */
-    public static CompletableFuture<Sums> getTaskForRow(int[][] matrix, Sums sums, int index) {
+    public static CompletableFuture<Sums> getTask(int[][] matrix, Sums sums, int index) {
         return CompletableFuture.supplyAsync(() -> {
             int totalRowSum = 0;
-            for (int i = 0; i < matrix.length; i++) {
-                totalRowSum += matrix[index][i];
-            }
-            sums.setRowSum(totalRowSum);
-            return sums;
-        });
-    }
-
-    /**
-     * Метод запускает асинхронную задачу по вычислению суммы элементов каждого столбца
-     * и присваивает результат в поле объекта Sums
-     *
-     * @param matrix матрица, столбцы которой необходимо суммировать
-     * @param sums   объект в поле которого будет помещен результат суммирования
-     * @param index  индекс столбца
-     * @return инициализирует поле rowCol, объекта типа Sums
-     * и возвращает CompletableFuture<Sums> значение которого можно получить методом get()
-     */
-    public static CompletableFuture<Sums> getTaskForColumn(int[][] matrix, Sums sums, int index) {
-        return CompletableFuture.supplyAsync(() -> {
             int totalColSum = 0;
             for (int i = 0; i < matrix.length; i++) {
+                totalRowSum += matrix[index][i];
                 totalColSum += matrix[i][index];
             }
+            sums.setRowSum(totalRowSum);
             sums.setColSum(totalColSum);
             return sums;
         });

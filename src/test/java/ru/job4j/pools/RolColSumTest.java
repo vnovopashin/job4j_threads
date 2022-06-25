@@ -35,7 +35,6 @@ public class RolColSumTest {
                 {4, 5, 6},
                 {7, 8, 9}
         });
-        Thread.sleep(1);
         Assert.assertThat(rolColSum[0].getRowSum(), is(6));
         Assert.assertThat(rolColSum[1].getRowSum(), is(15));
         Assert.assertThat(rolColSum[2].getRowSum(), is(24));
