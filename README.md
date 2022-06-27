@@ -15,3 +15,6 @@
 
 Создание ветки из IDEA.
 Создание ветки из IDEA.
+fix one
+fix two
+fix three
